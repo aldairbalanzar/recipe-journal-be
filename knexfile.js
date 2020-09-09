@@ -17,6 +17,7 @@ module.exports = {
       directory: './data/seeds',
     },
   },
+
   // db connection for testing
   testing: {
     client: "pg",
@@ -39,7 +40,6 @@ module.exports = {
     migrations: {
       directory: "./data/migrations",
       tableName: 'knex_migrations'
-
     },
     seeds: {
       directory: "./data/seeds",
