@@ -2,7 +2,7 @@ const db = require('../data/db-config');
 
 module.exports = {
     insertUser,
-    // findUserById,
+    findUserByUsername,
     // updateUser,
     // insertRecipe,
     // findRecipeById,
@@ -17,12 +17,20 @@ module.exports = {
 }
 
 async function insertUser(userData) {
-    console.log(`model function: userData has made it to insertUser().`)
     const newUser = await db('users').insert({
         username: userData.username,
         password: userData.password,
         created: Date.now()
     })
     .into('users')
+
+    console.log('usersModel-insertUser: check')
     return newUser
+};
+
+async function findUserByUsername(username) {
+    const user = await db('users').where(username)
+
+    console.log('usersModel-findUserByUsername: check')
+    return user
 }

@@ -1,18 +1,12 @@
-function handleUserData(reqBody) {
-    const { username, password } = reqBody;
+function handleUserData(req, res, next) {
+    const { username, password } = req.body;
 
-    let userData = {
+    req.body.userData = {
         username: username,
         password: password
     }
-
-    console.log(`
-    middleware:
-        username: ${userData.username}
-        password: ${userData.password}
-        `)
-
-        return userData
+    console.log(`middleware-handleUserData: check`)
+    next()
 }
 
 module.exports = handleUserData;
