@@ -9,6 +9,7 @@ exports.up = function(knex) {
             .unique();
             users.string('password', 255)
             .notNullable();
+            users.text('imageURL');
             users.string('created')
             .notNullable()
         })
