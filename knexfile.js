@@ -1,8 +1,9 @@
 module.exports = {
+
   development: {
-    client: 'pg',
+    client: 'sqlite3',
     connection: {
-      filename: './data/recipe-journal.db3'
+      filename: './data/recipt_journal.db3'
     },
     useNullAsDefault: true,
     pool: {
@@ -17,9 +18,10 @@ module.exports = {
       directory: './data/seeds',
     },
   },
+
   // db connection for testing
   testing: {
-    client: "pg",
+    client: "sqlite3",
     connection: {
       filename: "./data/test.db3",
     },
