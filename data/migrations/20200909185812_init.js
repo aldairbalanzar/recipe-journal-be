@@ -26,12 +26,14 @@ exports.up = function(knex) {
             .notNullable()
             .unique();
             recipes.text('description');
-            recipes.text('imageURL')
-            recipes.string('prepTime')
-            recipes.string('cookTime')
-            recipes.string('yields')
+            recipes.text('imageURL');
+            recipes.string('prepTime');
+            recipes.string('cookTime');
+            recipes.string('yields');
             recipes.string('created')
-            .notNullable()
+            .notNullable();
+            recipes.string('updated')
+            .notNullable();
         })
         //steps
         .createTable('steps', steps => {

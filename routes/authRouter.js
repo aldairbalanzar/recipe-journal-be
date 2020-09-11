@@ -42,7 +42,7 @@ router.post('/login', handleUserData, (req, res) => {
     })
     .catch(err => {
         console.log(`/login-POST-catch: ${err}`)
-        res.status(400).json({ errorMessage: 'could not log in with provided credentials.', error: err.message })
+        res.status(500).json({ errorMessage: 'Could not log user in, something went wrong...', error: err.message })
     })
 });
 
