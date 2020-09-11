@@ -3,6 +3,7 @@ const db = require('../data/db-config');
 module.exports = {
     insertUser,
     findUserByUsername,
+    findUserById,
     updateUserData,
     removeUser,
     // findRecipeById,
@@ -15,17 +16,6 @@ module.exports = {
     // updateIngredient,
     // removeIngredient
 }
-
-async function insertUser(userData) {
-    const newUser = await db('users').insert({
-        username: userData.username,
-        password: userData.password,
-        created: Date.now()
-    }).into('users')
-    console.log('usersModel-insertUser: check')
-    return newUser
-};
-
 async function findUserByUsername(username) {
     const user = await db('users').where(username)
 
@@ -33,16 +23,36 @@ async function findUserByUsername(username) {
     return user
 };
 
-function updateUserData(userId, changes) {
-    console.log('model-updateUserData: updating...')
-    return db('users')
+async function insertUser(userData) {
+    const id = await db('users').insert({
+        username: userData.username,
+        password: userData.password,
+        created: Date.now()
+    }).into('users')
+    console.log('usersModel-insertUser: check')
+    return findUserById(id)
+};
+
+
+async function findUserById(userId) {
+    const user = await db('users').where('id', userId).first()
+    return user
+}
+
+async function updateUserData(userId, changes) {
+    const id = await db('users')
         .where('id', userId)
-        .update(changes)
+        .update({
+            username: changes.username,
+            password: changes.password
+        })
+        console.log('model-updateUserData: check')
+        return findUserById(id)
 };
 
 function removeUser(userId) {
     console.log('model-removeUser: removing...')
-    return('users')
+    return db('users')
         .where('id', userId)
         .del()
 };
