@@ -16,9 +16,13 @@ router.post('/register', hashPassword, handleUserData, (req, res) => {
     let { userData } = req.body
 
     Users.insertUser(userData)
-    .then(response => {
-        console.log(`registered user id: ${response}`)
-        res.status(201).json({ message: 'successfuly registered!',  id: response[0] })
+    .then(newUser => {
+        delete newUser.password
+        console.log(`
+        Registered user!
+            id: ${newUser.id}
+            username: ${newUser.username}`)
+        res.status(201).json({ message: 'successfuly registered!',  id: newUser })
     })
     .catch(err => {
         console.log(`/-POST-catch: ${err}`)
