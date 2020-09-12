@@ -3,13 +3,13 @@ const authenticateRequest = require('../middleware/authenticateRequest');
 const handleUserData = require('../middleware/handleUserData');
 const handleUpdateUser = require('../middleware/handleUpdateUser');
 const Users = require('../model/usersModel');
-const { updateUserData } = require('../model/usersModel');
 
 
 // check router connection 
 router.get('/', (req, res) => {
     res.status(200).json({ message: `this is where we will interact with users route.`})
 });
+
 
 router.put('/:userId', authenticateRequest, handleUpdateUser, handleUserData, (req, res) => {
     let { userData } = req.body;
@@ -35,10 +35,7 @@ router.delete('/:userId', authenticateRequest, (req, res) => {
 
     Users.removeUser(userId)
     .then(response => {
-        console.log(`
-        User deleted!
-            id: ${response}
-        `)
+        console.log('User deleted!')
         res.status(200).json({ message: 'Successfuly deleted user.', response })
     })
     .catch(err => {

@@ -33,7 +33,6 @@ exports.up = function(knex) {
             recipes.string('created')
             .notNullable();
             recipes.string('updated')
-            .notNullable();
         })
         //steps
         .createTable('steps', steps => {

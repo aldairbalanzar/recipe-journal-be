@@ -1,17 +1,30 @@
 function handleRecipeData(req, res, next) {
     let { userId } = req.params;
-    let { recipeName, description, imageURL, prepTime, cookTime, yields } = req.body;
+    let { id, recipeName, description, imageURL, prepTime, cookTime, yields } = req.body;
 
     req.body.recipeData = {
+        id: id,
         user_id: userId,
         recipeName: recipeName,
         description: description,
         imageURL: imageURL,
         prepTime: prepTime,
         cookTime: cookTime,
-        yields: yields
+        yields: yields,
+        updated: Date.now()
     }
     console.log(`middleware-handleRecipeData: check`)
+    // console.log(`
+    // id: ${req.body.recipeData.id},
+    // user_id: ${req.body.recipeData.user_id},
+    // recipeName: ${req.body.recipeData.recipeName},
+    // description: ${req.body.recipeData.description},
+    // imageURL: ${req.body.recipeData.imageURL},
+    // prepTime: ${req.body.recipeData.prepTime},
+    // cookTime: ${req.body.recipeData.cookTime},
+    // yields: ${req.body.recipeData.yields},
+    // updated: ${req.body.recipeData.updated}
+    // `)
     next()
 }
 
