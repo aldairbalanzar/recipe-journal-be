@@ -89,6 +89,6 @@ router.delete('/:userId/:recipeId', authenticateRequest, (req, res) => {
         console.log(`/userId/recipeId-DELETE-catch: ${err}`)
         res.status(500).json({ errorMessage: 'Could not delete that recipe, something went wrong...' })
     })
-})
+});
 
 module.exports = router;

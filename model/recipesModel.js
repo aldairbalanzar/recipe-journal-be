@@ -7,6 +7,7 @@ module.exports = {
     updateRecipe,
     removeRecipe
 }
+
 async function findRecipeById(recipeId) {
     const recipe = await db('recipes').where('id', recipeId).first()
     console.log('model-findRecipeById: check')
