@@ -1,14 +1,13 @@
 const express = require('express');
 const server = express();
 
-const apiRouter = require('./apiRouter');
+const apiRouter = require('./routes/apiRouter');
 const cors = require('cors');
 const helmet = require('helmet');
 const fileupload = require('express-fileupload');
 const accessControl = require('./middleware/access_control_middleware');
 
 server.use(fileupload({ useTempFiles: true }));
-
 server.use(helmet());
 server.use(cors());
 server.use(express.json());

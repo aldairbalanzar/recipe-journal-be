@@ -22,7 +22,7 @@ router.post('/register', hashPassword, handleUserData, (req, res) => {
         Registered user!
             id: ${newUser.id}
             username: ${newUser.username}`)
-        res.status(201).json({ message: 'successfuly registered!',  id: newUser })
+        res.status(201).json({ message: 'successfuly registered!',  user: newUser })
     })
     .catch(err => {
         console.log(`/-POST-catch: ${err}`)
@@ -42,7 +42,7 @@ router.post('/login', handleUserData, (req, res) => {
             id: ${id},
             username: ${username}
         `)
-        res.status(200).json({ message: 'successfuly logged in!', id, username, token })
+        res.status(200).json({ message: 'successfuly logged in!', user: id, username, token })
     })
     .catch(err => {
         console.log(`/login-POST-catch: ${err}`)

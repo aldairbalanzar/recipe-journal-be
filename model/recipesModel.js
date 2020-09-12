@@ -10,7 +10,6 @@ module.exports = {
 
 async function findRecipeById(recipeId) {
     const recipe = await db('recipes').where('id', recipeId).first()
-    console.log('model-findRecipeById: check')
     return recipe
 };
 
