@@ -4,15 +4,8 @@ module.exports = {
     findRecipeById,
     findUserRecipes,
     insertRecipe,
-    // findRecipeById,
-    // updateRecipe,
-    // removeRecipe,
-    // insertStep,
-    // updateStep,
-    // removeStep,
-    // insertIngredient,
-    // updateIngredient,
-    // removeIngredient
+    updateRecipe,
+    removeRecipe
 }
 async function findRecipeById(recipeId) {
     const recipe = await db('recipes').where('id', recipeId).first()
@@ -34,7 +27,7 @@ async function findUserRecipes(userId) {
 };
 
 async function insertRecipe(recipeData) {
-    const newRecipeId = await db('recipes').insert({
+    const result = await db('recipes').insert({
         user_id: recipeData.user_id,
         recipeName: recipeData.recipeName,
         description: recipeData.description,
@@ -45,5 +38,27 @@ async function insertRecipe(recipeData) {
         created: Date.now()
     }).into('recipes')
    return findUserRecipes(recipeData.user_id)
+};
+
+async function updateRecipe(recipeData) {
+    const result = await db('recipes')
+        .where('id', recipeData.id)
+        .update({
+            recipeName: recipeData.recipeName,
+            description: recipeData.description,
+            imageURL: recipeData.imageURL,
+            prepTime: recipeData.prepTime,
+            cookTime: recipeData.cookTime,
+            yields: recipeData.yields,
+            updated: recipeData.updated
+        })
+        return findRecipeById(recipeData.id)
+};
+
+function removeRecipe(recipeId) {
+    console.log('model-removeRecipe: removing...')
+    return db('recipes')
+        .where('id', recipeId)
+        .del()
 };
 
