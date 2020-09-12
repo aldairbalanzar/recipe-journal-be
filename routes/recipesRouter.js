@@ -75,7 +75,7 @@ router.put('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
         console.log(`/recipes/userId-PUT-catch: ${err}`)
         res.status(500).json({ errorMessage:'Could not update recipe, something went wrong...'})
     })
-})
+});
 
 router.delete('/:userId/:recipeId', authenticateRequest, (req, res) => {
     let { recipeId } = req.params
