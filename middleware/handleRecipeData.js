@@ -4,7 +4,7 @@ function handleRecipeData(req, res, next) {
 
     req.body.recipeData = {
         id: id,
-        user_id: userId,
+        userId: userId,
         recipeName: recipeName,
         description: description,
         imageURL: imageURL,

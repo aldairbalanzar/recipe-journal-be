@@ -13,6 +13,6 @@ router.get('/', (req, res) => {
 router.use('/auth', authRouter);
 router.use('/users', authenticator, usersRouter);
 router.use('/recipes', authenticator, recipesRouter);
-recipesRouter.use('/steps', authenticator, stepsRouter);
+// router.use('/steps', authenticator, stepsRouter);
 
 module.exports = router;

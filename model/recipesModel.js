@@ -5,7 +5,21 @@ module.exports = {
     findUserRecipes,
     insertRecipe,
     updateRecipe,
-    removeRecipe
+    removeRecipe,
+    findStepById,
+    findRecipeSteps,
+    findAllRecipes,
+    insertRecipeStep,
+    updateRecipeStep,
+    removeRecipeStep
+};
+
+
+// Recipes
+async function findAllRecipes() {
+    const recipes = await db('recipes')
+    console.log('model-findAllRecipes: check')
+    return recipes
 }
 
 async function findRecipeById(recipeId) {
@@ -14,8 +28,7 @@ async function findRecipeById(recipeId) {
 };
 
 async function findUserRecipes(userId) {
-    const arr = await db('recipes')
-        .where('user_id', userId);
+    const arr = await db('recipes').where('userId', userId);
 
     let recipes = [...arr]
     for(let i = 0; i < arr.length; i++){
@@ -27,8 +40,9 @@ async function findUserRecipes(userId) {
 };
 
 async function insertRecipe(recipeData) {
+    console.log('model-insertRecipe: inserting...')
     const result = await db('recipes').insert({
-        user_id: recipeData.user_id,
+        userId: recipeData.userId,
         recipeName: recipeData.recipeName,
         description: recipeData.description,
         imageURL: recipeData.imageURL,
@@ -37,10 +51,11 @@ async function insertRecipe(recipeData) {
         yields: recipeData.yields,
         created: Date.now()
     }).into('recipes')
-   return findUserRecipes(recipeData.user_id)
+   return findUserRecipes(recipeData.userId)
 };
 
 async function updateRecipe(recipeData) {
+    console.log('model-updateRecipe: updating...')
     const result = await db('recipes')
         .where('id', recipeData.id)
         .update({
@@ -62,3 +77,50 @@ function removeRecipe(recipeId) {
         .del()
 };
 
+
+// Steps
+async function findStepById(stepId) {
+    const step = await db('steps').where('id', stepId)
+    console.log('model-findStepById: check')
+    return step
+};
+
+async function findRecipeSteps(recipeId) {
+    const steps = await db('steps').where('recipeId', recipeId)
+    console.log('model-findUserRecipes: check')
+    return steps
+};
+
+async function insertRecipeStep(stepData) {
+    console.log('model-insertRecipeStep: inserting...')
+    const id = await db('steps').insert({
+        recipeId: stepData.recipeId,
+        stepNum: stepData.stepNum,
+        stepInstruction: stepData.instruction
+    })
+    return findStepById(id)
+    
+};
+
+async function updateRecipeStep(stepData) {
+    console.log('model-updateRecipeStep: updating...')
+    console.log(stepData)
+    const result = await db('steps')
+        .where({
+            id: stepData.id,
+            recipeId: stepData.recipeId
+        })
+        .update({
+            stepNum: stepData.stepNum,
+            stepInstruction: stepData.instruction
+        })
+        console.log(`RESULT: ${result}`)
+        return findRecipeSteps(stepData.recipeId)
+};
+
+function removeRecipeStep(stepId) {
+    console.log('model-removeRecipeStep: removing...')
+    return db('steps')
+        .where('id', stepId)
+        .del()
+}

@@ -1,14 +1,20 @@
 const router = require('express').Router();
 const authenticateRequest = require('../middleware/authenticateRequest');
 const handleRecipeData = require('../middleware/handleRecipeData');
+const handleStepData = require('../middleware/handleStepData');
 const Recipes = require('../model/recipesModel');
 
-
-// check router connection 
 router.get('/', (req, res) => {
-    res.status(200).json({ message: `this is where we will interact with recipes route.` })
-});
-
+    Recipes.findAllRecipes()
+    .then(recipes => {
+        console.log('Recipes found!')
+        res.status(200).json({ message: 'Here are the recipes.', recipes})
+    })
+    .catch(err => {
+        console.log(`/recipes-GET: ${err}`)
+        res.status(500).json({ errorMessage: 'Could not get recipes, something went wrong...'})
+    })
+})
 
 router.get('/:userId', authenticateRequest, (req, res) => {
     let { userId } = req.params;
@@ -23,6 +29,7 @@ router.get('/:userId', authenticateRequest, (req, res) => {
     })
     .catch(err => {
         console.log(`/recipes/userId-GET-catch: ${err}`)
+        res.status(500).json({ errorMessage: 'Could not get recipes, something went wrong...'})
     })
 
 });
@@ -35,7 +42,7 @@ router.post('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
         let newRecipe = recipes[recipes.length - 1]
         console.log(`
         created recipe!
-            user_id: ${newRecipe.user_id}
+            user_id: ${newRecipe.userId}
             recipeName: ${newRecipe.recipeName}
             description: ${newRecipe.description}
             imageURL: ${newRecipe.imageURL}
@@ -59,7 +66,7 @@ router.put('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
         console.log(`
         updatedRecipe:
             id: ${updatedRecipe.id},
-            user_id: ${updatedRecipe.user_id},
+            user_id: ${updatedRecipe.userId},
             recipeName: ${updatedRecipe.recipeName},
             description: ${updatedRecipe.description},
             imageURL: ${updatedRecipe.imageURL},
@@ -90,5 +97,76 @@ router.delete('/:userId/:recipeId', authenticateRequest, (req, res) => {
         res.status(500).json({ errorMessage: 'Could not delete that recipe, something went wrong...' })
     })
 });
+
+// Steps
+router.get('/:recipeId/steps', (req, res) => {
+    let { recipeId } = req.params
+
+    Recipes.findRecipeSteps(recipeId)
+    .then(response => {
+        console.log(`
+        Found steps!
+        number of steps: ${response.length}`)
+        res.status(200).json({ message: 'Recipe steps found!', response})
+    })
+    .catch(err => {
+        console.log(`/steps/recipeId-GET: ${err}`)
+        res.status(500).json({ errorMessage: 'Could not get the steps to that recipe, something went wrong...'})
+    })
+});
+
+router.post('/:userId/:recipeId/steps', authenticateRequest, handleStepData, (req, res) => {
+    let { stepData } = req.body
+
+    Recipes.insertRecipeStep(stepData)
+    .then(response => {
+        console.log(`
+        Step added!
+            ${response}`)
+        res.status(201).json({ message: 'Step successfuly added to recipe!', response})
+    })
+    .catch(err => {
+        console.log(`/recipes/userId/recipeId/steps: ${err}`)
+        res.status(500).json({ errorMessage: 'Could not add that step to the recipe, something went wrong...', err })
+    })
+});
+
+router.put('/:userId/:recipeId/steps/:stepId', authenticateRequest, handleStepData, (req, res) => {
+    let { stepId } = req.params
+    let { stepData } = req.body
+
+    Recipes.updateRecipeStep(stepData, stepId)
+    .then(response => {
+        if(response > 0){
+            console.log(`
+            Found steps!
+            number of steps: ${response.length}`)
+            res.status(201).json({ message: 'Step successfuly updated!', response})
+        } else {
+            console.log(`Recipe updated!`)
+            res.status(400).json({ message: 'Recipe successfuly updated!', response})
+        }
+    })
+    .catch(err => {
+        console.log(`/recipes/userId/recipeId/steps-PUT-catch: ${err}`)
+        res.status(500).json({ errorMessage: 'Could not update that step, something went wrong...', err})
+    })
+});
+
+router.delete('/:userId/steps/:stepId', authenticateRequest, (req, res) => {
+    let { stepId } = req.params
+
+    Recipes.removeRecipeStep(stepId)
+    .then(response => {
+        console.log(`
+        Step deleted!
+        `)
+        res.status(200).json({ message: 'Step successfuly deleted!', response })
+    })
+    .catch(err => {
+        console.log(`/recipes/userId/steps/stepId: ${err}`)
+        res.status(500).jsong({ errorMessage: 'Could not delete that step, something went wrong...' })
+    })
+})
 
 module.exports = router;

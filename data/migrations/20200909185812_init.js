@@ -17,7 +17,7 @@ exports.up = function(knex) {
         //recipes
         .createTable('recipes', recipes => {
             recipes.increments('id')
-            recipes.integer('user_id', 255)
+            recipes.integer('userId', 255)
             .notNullable()
             .references('users.id')
             .onDelete('CASCADE')
@@ -37,7 +37,7 @@ exports.up = function(knex) {
         //steps
         .createTable('steps', steps => {
             steps.increments('id')
-            steps.integer('recipe_id', 255)
+            steps.integer('recipeId', 255)
             .references('recipes.id')
             .onDelete('CASCADE')
             .onUpdate('CASCADE');
@@ -59,13 +59,13 @@ exports.up = function(knex) {
         .createTable('recipe_ingredients', recipe_ingredients => {
             recipe_ingredients.increments('id')
             //recipeId
-            recipe_ingredients.integer('recipe_id', 255)
+            recipe_ingredients.integer('recipeId', 255)
             .notNullable()
             .references('recipes.id')
             .onDelete('CASCADE')
             .onUpdate('CASCADE');
             //ingredientId
-            recipe_ingredients.integer('ingredient_id')
+            recipe_ingredients.integer('ingredientId')
             .notNullable()
             .references('ingredients.id')
             .onDelete('CASCADE')
