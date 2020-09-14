@@ -52,7 +52,6 @@ router.post('/login', handleUserData, (req, res) => {
 
 
 // abstracted functions
-
 function generateToken(user) {
     const payload = {
       id: user.id,
@@ -60,7 +59,7 @@ function generateToken(user) {
     };
     const secret = secrets.jwtSecret;
     const options = {
-      expiresIn: 1000 * 60 * 4
+      expiresIn: 1000 * 60 * 1
     };
     
     console.log('generateToken: check')
