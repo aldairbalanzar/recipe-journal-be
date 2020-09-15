@@ -2,8 +2,11 @@ const router = require('express').Router();
 const authenticateRequest = require('../middleware/authenticateRequest');
 const handleRecipeData = require('../middleware/handleRecipeData');
 const handleStepData = require('../middleware/handleStepData');
+const { findIngredientByName } = require('../model/recipesModel');
 const Recipes = require('../model/recipesModel');
 
+
+// Recipes
 router.get('/', (req, res) => {
     Recipes.findAllRecipes()
     .then(recipes => {
@@ -168,5 +171,60 @@ router.delete('/:userId/steps/:stepId', authenticateRequest, (req, res) => {
         res.status(500).jsong({ errorMessage: 'Could not delete that step, something went wrong...' })
     })
 })
+
+
+// Ingredients
+// get recipe's ingredients
+router.get('/:recipeId/ingredients', (req, res) => {
+    let { recipeId } = req.params
+
+    Recipes.findIngredientsByRecipeId(recipeId)
+    .then(response => {
+        console.log(`
+        response:
+        ${response}
+        `)
+        res.status(200).json({ message: 'GET ingredients', response })
+    })
+    .catch(err => {
+        console.log(`/recipeId/ingredients-GET: ${err}`)
+        res.status(500).json({ errorMessage: 'Could not get the ingredients to that recipe, something went wrong...'})
+    })
+});
+
+// post recipe's ingredients
+router.post('/:userId/:recipeId/ingredients', authenticateRequest, (req, res) => {
+    const { recipeId } = req.params
+    const { ingredientName, amount } = req.body
+    let ingredientData = {
+        recipeId: recipeId,
+        ingredientName: ingredientName,
+        amount: amount
+    }
+    Recipes.insertRecipeIngredient(ingredientData)
+    .then(response => {
+        console.log(`
+        response:
+        ${response[0]}
+        `)
+        res.status(200).json({ message: 'POST ingredients', response })
+    })
+    .catch(err => {
+        console.log(`/userId/recipeId/ingredients-POST: ${err}`)
+        res.status(500).json({ errorMessage: 'Could not add ingredient to that recipe.', err })
+    })
+});
+
+// put recipe's ingredients
+router.put('/:userId/:recipeId/ingredients/:ingredientId', (req, res) => {
+    console.log('PUT ingreditnes')
+    res.status(200).json({ message: 'PUT ingredients' })
+});
+
+// delete recipe's ingredients
+router.delete('/:userId/:recipeId/ingredients/:ingredientId', (req, res) => {
+    console.log('DELETE ingredients')
+    res.status(201).json({ message: 'DELETE ingredients'})
+});
 
 module.exports = router;
