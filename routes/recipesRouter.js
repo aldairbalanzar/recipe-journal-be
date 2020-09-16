@@ -2,7 +2,6 @@ const router = require('express').Router();
 const authenticateRequest = require('../middleware/authenticateRequest');
 const handleRecipeData = require('../middleware/handleRecipeData');
 const handleStepData = require('../middleware/handleStepData');
-const { findIngredientByName } = require('../model/recipesModel');
 const Recipes = require('../model/recipesModel');
 
 
@@ -178,13 +177,14 @@ router.delete('/:userId/steps/:stepId', authenticateRequest, (req, res) => {
 router.get('/:recipeId/ingredients', (req, res) => {
     let { recipeId } = req.params
 
-    Recipes.findIngredientsByRecipeId(recipeId)
-    .then(response => {
+    Recipes.findRecipeIngredientsByRecipeId(recipeId)
+    .then(ingredients => {
         console.log(`
-        response:
-        ${response}
+        Ingredients found!
+            ingredients:
+            ${ingredients.length}
         `)
-        res.status(200).json({ message: 'GET ingredients', response })
+        res.status(200).json({ message: 'Recipe ingredients found!', ingredients })
     })
     .catch(err => {
         console.log(`/recipeId/ingredients-GET: ${err}`)
