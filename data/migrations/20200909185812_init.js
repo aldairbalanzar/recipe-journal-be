@@ -24,7 +24,6 @@ exports.up = function(knex) {
             .onUpdate('CASCADE');
             recipes.string('recipeName', 255)
             .notNullable()
-            .unique();
             recipes.text('description');
             recipes.text('imageURL');
             recipes.string('prepTime');
@@ -71,9 +70,6 @@ exports.up = function(knex) {
             .onDelete('CASCADE')
             .onUpdate('CASCADE');
             recipe_ingredients.string('amount', 255)
-            .notNullable()
-            recipe_ingredients.string('created')
-            .notNullable()
         })
     )
 };
