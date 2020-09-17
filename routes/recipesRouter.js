@@ -1,7 +1,9 @@
 const router = require('express').Router();
 const authenticateRequest = require('../middleware/authenticateRequest');
+const handleIngredientData = require('../middleware/handleIngredientData');
 const handleRecipeData = require('../middleware/handleRecipeData');
 const handleStepData = require('../middleware/handleStepData');
+// const handleIngredientData =  require('../middleware/handleIngredientData');
 const Recipes = require('../model/recipesModel');
 
 
@@ -193,9 +195,9 @@ router.get('/:recipeId/ingredients', (req, res) => {
 });
 
 // post recipe's ingredients
-router.post('/:userId/:recipeId/ingredients', authenticateRequest, (req, res) => {
+router.post('/:userId/:recipeId/ingredients', authenticateRequest, handleIngredientData, (req, res) => {
     const { recipeId } = req.params
-    const { ingredientName, amount } = req.body
+    const { ingredientName, amount } = req.body.ingredientData
     let ingredientData = {
         recipeId: recipeId,
         ingredientName: ingredientName,
@@ -203,11 +205,19 @@ router.post('/:userId/:recipeId/ingredients', authenticateRequest, (req, res) =>
     }
     Recipes.insertRecipeIngredient(ingredientData)
     .then(response => {
-        console.log(`
-        response:
-        ${response[0]}
-        `)
-        res.status(200).json({ message: 'POST ingredients', response })
+        if(response.length < 1) {
+            console.log(`
+            response:
+            ${response.length}
+            `)
+            res.status(200).json({ message: 'That ingredient already exists in this recipe.', response })
+        } else {
+            console.log(`
+            Ingredient added!:
+            ${response}
+            `)
+            res.status(200).json({ message: 'Ingredient successfuly added to recipe.', response })
+        }
     })
     .catch(err => {
         console.log(`/userId/recipeId/ingredients-POST: ${err}`)
@@ -216,15 +226,39 @@ router.post('/:userId/:recipeId/ingredients', authenticateRequest, (req, res) =>
 });
 
 // put recipe's ingredients
-router.put('/:userId/:recipeId/ingredients/:ingredientId', (req, res) => {
-    console.log('PUT ingreditnes')
-    res.status(200).json({ message: 'PUT ingredients' })
-});
+// router.put('/:userId/:recipeId/ingredients/:ingredientId', handleIngredientData, authenticateRequest, (req, res) => {
+//     let { ingredientData } = req.body
+
+//     Recipes.updateRecipe(ingredientData)
+//     .then(response => {
+//         console.log(`
+//         Ingredient updated:
+//             ${response}
+//         `)
+//         res.status(201).json({ message: 'Ingredient successfuly updated!', response })
+//     })
+//     .catch(err => {
+//         console.log(`/userId/recipeId/ingredients/ingredientId-PUT: ${err}`)
+//         res.status(500).json({ errorMessage: 'Could not update that ingredient, something went wrong...', err})
+//     })
+// });
 
 // delete recipe's ingredients
-router.delete('/:userId/:recipeId/ingredients/:ingredientId', (req, res) => {
-    console.log('DELETE ingredients')
-    res.status(201).json({ message: 'DELETE ingredients'})
+router.delete('/:userId/:recipeId/ingredients/:ingredientId', authenticateRequest, (req, res) => {
+    let { recipeId, ingredientId } = req.params
+
+    Recipes.removeRecipeIngredient(recipeId, ingredientId)
+    .then(response => {
+        console.log(`
+         Ingredient deleted:
+             ${response[0]}
+         `)
+         res.status(201).json({ message: 'Ingredient successfuly deleted!' })
+    })
+    .catch(err => {
+        console.log(`/userId/recipeId/ingredients/ingredientId-DELETE: ${err}`)
+        res.status(500).json({ errorMessage: 'Could not delete that ingredient, something went wrong...', err})
+    })
 });
 
 module.exports = router;
