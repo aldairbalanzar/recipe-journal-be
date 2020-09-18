@@ -27,7 +27,7 @@ async function insertUser(userData) {
     const id = await db('users').insert({
         username: userData.username,
         password: userData.password,
-        created: Date.now()
+        created: new Date()
     }).into('users')
     console.log('usersModel-insertUser: check')
     return findUserById(id)
@@ -44,7 +44,8 @@ async function updateUserData(userId, changes) {
         .where('id', userId)
         .update({
             username: changes.username,
-            password: changes.password
+            password: changes.password,
+            updated: new Date()
         })
         console.log('model-updateUserData: check')
         return findUserById(id)
