@@ -205,19 +205,11 @@ router.post('/:userId/:recipeId/ingredients', authenticateRequest, handleIngredi
     }
     Recipes.insertRecipeIngredient(ingredientData)
     .then(response => {
-        if(response.length < 1) {
-            console.log(`
-            response:
-            ${response.length}
-            `)
-            res.status(200).json({ message: 'That ingredient already exists in this recipe.', response })
-        } else {
-            console.log(`
-            Ingredient added!:
-            ${response}
-            `)
-            res.status(200).json({ message: 'Ingredient successfuly added to recipe.', response })
-        }
+        console.log(`
+        Ingredient added!:
+        ${response}
+        `)
+        res.status(200).json({ message: 'Ingredient successfuly added to recipe.', response })
     })
     .catch(err => {
         console.log(`/userId/recipeId/ingredients-POST: ${err}`)
