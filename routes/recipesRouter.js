@@ -3,7 +3,6 @@ const authenticateRequest = require('../middleware/authenticateRequest');
 const handleIngredientData = require('../middleware/handleIngredientData');
 const handleRecipeData = require('../middleware/handleRecipeData');
 const handleStepData = require('../middleware/handleStepData');
-// const handleIngredientData =  require('../middleware/handleIngredientData');
 const Recipes = require('../model/recipesModel');
 
 
@@ -175,7 +174,6 @@ router.delete('/:userId/steps/:stepId', authenticateRequest, (req, res) => {
 
 
 // Ingredients
-// get recipe's ingredients
 router.get('/:recipeId/ingredients', (req, res) => {
     let { recipeId } = req.params
 
@@ -194,7 +192,6 @@ router.get('/:recipeId/ingredients', (req, res) => {
     })
 });
 
-// post recipe's ingredients
 router.post('/:userId/:recipeId/ingredients', authenticateRequest, handleIngredientData, (req, res) => {
     const { recipeId } = req.params
     const { ingredientName, amount } = req.body.ingredientData
@@ -222,7 +219,6 @@ router.post('/:userId/:recipeId/ingredients', authenticateRequest, handleIngredi
     })
 });
 
-// delete recipe's ingredients
 router.delete('/:userId/:recipeId/ingredients/:ingredientId', authenticateRequest, (req, res) => {
     let { recipeId, ingredientId } = req.params
 
