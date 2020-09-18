@@ -205,11 +205,16 @@ router.post('/:userId/:recipeId/ingredients', authenticateRequest, handleIngredi
     }
     Recipes.insertRecipeIngredient(ingredientData)
     .then(response => {
-        console.log(`
-        Ingredient added!:
-        ${response}
-        `)
-        res.status(200).json({ message: 'Ingredient successfuly added to recipe.', response })
+        if(typeof(response) === 'string') {
+            console.log(`/userId/recipeId/ingredients: ${response}`)
+            res.status(400).json({ message: 'This ingredient is already added to the recipe.' })
+        } else {
+            console.log(`
+            Ingredient added!:
+            ${response}
+            `)
+            res.status(200).json({ message: 'Ingredient successfuly added to recipe.', response })
+        }
     })
     .catch(err => {
         console.log(`/userId/recipeId/ingredients-POST: ${err}`)
@@ -217,35 +222,22 @@ router.post('/:userId/:recipeId/ingredients', authenticateRequest, handleIngredi
     })
 });
 
-// put recipe's ingredients
-// router.put('/:userId/:recipeId/ingredients/:ingredientId', handleIngredientData, authenticateRequest, (req, res) => {
-//     let { ingredientData } = req.body
-
-//     Recipes.updateRecipe(ingredientData)
-//     .then(response => {
-//         console.log(`
-//         Ingredient updated:
-//             ${response}
-//         `)
-//         res.status(201).json({ message: 'Ingredient successfuly updated!', response })
-//     })
-//     .catch(err => {
-//         console.log(`/userId/recipeId/ingredients/ingredientId-PUT: ${err}`)
-//         res.status(500).json({ errorMessage: 'Could not update that ingredient, something went wrong...', err})
-//     })
-// });
-
 // delete recipe's ingredients
 router.delete('/:userId/:recipeId/ingredients/:ingredientId', authenticateRequest, (req, res) => {
     let { recipeId, ingredientId } = req.params
 
     Recipes.removeRecipeIngredient(recipeId, ingredientId)
     .then(response => {
-        console.log(`
-         Ingredient deleted:
-             ${response[0]}
-         `)
-         res.status(201).json({ message: 'Ingredient successfuly deleted!' })
+        if(response === 0) {
+            console.log(`/userId/recipeId/ingredients: ${response}`)
+            res.status(200).json({ message: 'That ingredient is not in this recipe.' })
+        } else {
+            console.log(`
+             Ingredient deleted:
+                 ${response[0]}
+             `)
+             res.status(201).json({ message: 'Ingredient successfuly deleted!' })
+        }
     })
     .catch(err => {
         console.log(`/userId/recipeId/ingredients/ingredientId-DELETE: ${err}`)
