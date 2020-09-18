@@ -56,7 +56,7 @@ async function insertRecipe(recipeData) {
         prepTime: recipeData.prepTime,
         cookTime: recipeData.cookTime,
         yields: recipeData.yields,
-        created: Date.now()
+        created: new Date()
     }).into('recipes')
    return findUserRecipes(recipeData.userId)
 };

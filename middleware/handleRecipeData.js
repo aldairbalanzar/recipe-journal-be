@@ -11,7 +11,7 @@ function handleRecipeData(req, res, next) {
         prepTime: prepTime,
         cookTime: cookTime,
         yields: yields,
-        updated: Date.now()
+        updated: new Date()
     }
     console.log(`middleware-handleRecipeData: check`)
     // console.log(`
