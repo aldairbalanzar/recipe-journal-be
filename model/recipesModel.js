@@ -6,18 +6,22 @@ module.exports = {
     insertRecipe,
     updateRecipe,
     removeRecipe,
+
     findStepById,
     findRecipeSteps,
     findAllRecipes,
     insertRecipeStep,
     updateRecipeStep,
     removeRecipeStep,
+
     findIngredientDataByMidId,
     findMidIdByIds,
-    findIngredientIdByIngredientName,
+    findIngredientDataByIngredientName,
     findIngredientNameByIngredientId,
     findRecipeIngredientsByRecipeId,
-    insertRecipeIngredient
+    insertRecipeIngredient,
+    insertMidDataToTable,
+    removeRecipeIngredient
 
 };
 
@@ -135,11 +139,18 @@ function removeRecipeStep(stepId) {
 
 // Ingredients
 
+// HELPER functions
 // Function to find ingredientId with just ingredientName
-async function findIngredientIdByIngredientName(ingredientName) {
-    const ingredientId = await db('ingredients').where({ ingredientName }).first()
-    console.log(`model-findIngredientIdByIngredientName - check`)
-    return ingredientId
+async function findIngredientDataByIngredientName(ingredientName) {
+    console.log(`ingredientName: ${ingredientName}`)
+    const ingredient = await db('ingredients').where({ ingredientName })
+    console.log(`model-findIngredientDataByIngredientName - check`)
+    if(ingredient.length === 0) {
+        return null
+    } else {
+
+        return ingredient
+    }
 };
 
 // Function to find ingredientName with just ingredientId
@@ -151,13 +162,13 @@ async function findIngredientNameByIngredientId(ingredientId) {
 };
 
 // Function to find midId by recipeId and ingredientId
-async function findMidIdByIds(recipeId, ingredientId) {
-    const midId = await db('recipe_ingredients').where({
+async function findMidIdByIds(recipeId, foundIngredient) {
+    let midObject = await db('recipe_ingredients').where({
         recipeId: recipeId,
-        ingredientId: ingredientId
+        ingredientId: foundIngredient.id
     }).first()
-    console.log(`model-findMidIdByIds - check`)
-    return midId
+    console.log(`model-findMidIdByIds - ${midObject} check`)
+    return midObject
 };
 
 // Function to find ingredient data by midId
@@ -165,13 +176,20 @@ async function findIngredientDataByMidId(midId) {
     let ingredient = {}
     const data = await db('recipe_ingredients').where('id', midId).first()
 
-    ingredient.ingredientName = await 
+    ingredient.recipe_ingredientsId = data.id,
+    ingredient.ingredientId = data.ingredientId,
+    ingredient.recipeId = data.recipeId,
+    ingredient.ingredientName = await
     findIngredientNameByIngredientId(data.ingredientId)
     ingredient.amount = data.amount
+
     console.log(`model-findIngredientDataByMidId - check`)
     return ingredient
 };
 
+// ---------------------------------------------------------------------------
+
+// Main GET all ingredients
 // Function to find all ingredients and data for a recipe
 async function findRecipeIngredientsByRecipeId(recipeId) {
     let ingredientList = []
@@ -186,53 +204,135 @@ async function findRecipeIngredientsByRecipeId(recipeId) {
     return ingredientList
 };
 
-async function insertRecipeIngredient(ingredientData) {
-    let ingredient = null
-    
-    // First check if ingredient already exists in ingredients table
-    let { ingredientName } = ingredientData
-    let ingredientId = await findIngredientIdByIngredientName(ingredientName)
-    console.log(`model-ingredientId: ${ingredientId}`)
-    
-    // IF not in table, insert ingredientName to table and add ids to mid table
-    if(!ingredientId) {
-        let ingredientId = await db('ingredients').insert({
-            ingredientName: ingredientData.ingredientName
-        })
-        console.log(`ingredients insert: ${ingredientId}`)
+// Function to insert ingredient to table and retrieve id
+async function insertIngredientToTable(ingredientData) {
+    ingredientId =  await db('ingredients').insert({
+        ingredientName: ingredientData.ingredientName
+    })
 
-        // With the ingredientId returned, add it to middle table with recipeId
-        let midId = await db('recipe_ingredients').insert({
-            recipeId: ingredientData.recipeId,
-            ingredientId: ingredientId,
-            amount: ingredientData.amount
-        })
-        console.log(`recipe_ingredients insert: ${midId}`)
-        ingredient = await findIngredientDataByMidId(midId)
-        console.log(`model-insertRecipeIngredient-ingredient: ${ingredient}`)
-        return ingredient
+    console.log(`model-insertIngredientToTable: ${ingredientId} - check`)
+    return ingredientId
+};
+
+// Function to insert ids and amount to mid table
+async function insertMidDataToTable(ingredientData, ingredientId) {
+    console.log(`ingredientId: ${ingredientId}`)
+    let { recipeId, amount } = ingredientData
+    let midId = await db('recipe_ingredients').insert({
+        recipeId: recipeId,
+        ingredientId: ingredientId,
+        amount: amount
+    })
+
+    console.log(`model-insertMidDataToTable: ${midId} - check`)
+    return midId
+};
+
+
+
+
+
+
+async function handleBothIds(foundIngredient, foundMid) {
+    console.log('HANDLE BOTH')
+    let mid = await db('recipe_ingredients').where({ id: foundMid.id }).first()
+    let ingredient = {
+        ...foundIngredient,
+        amount: mid.amount,
+        midId: mid.id,
+        recipeId: mid.recipeId
+    }
+    console.log(`model - handleBothIds: This ingredient is already added to the recipe.`)
+    return 'This ingredient is already added to the recipe.'
+};
+
+async function handleOneId(foundIngredient, ingredientData) {
+    console.log('HANDLE ONE')
+    console.log(foundIngredient)
+    console.log(ingredientData)
+    let midId = await db('recipe_ingredients')
+    .insert({
+        recipeId: ingredientData.recipeId,
+        ingredientId: foundIngredient.id,
+        amount: ingredientData.amount
+    })
+    console.log('midId: ', midId)
+    let ingredient = {
+        ingredientId: foundIngredient.id,
+        ingredientName: foundIngredient.ingredientName,
+        amount: ingredientData.amount,
+        midId: midId[0],
+        recipeId: ingredientData.recipeId
     }
 
-    // IF in table, check if recipeId exist with it in mid table
-    if(ingredientId) {
-        let midId = findMidIdByIds(recipeId, ingredientId)
-        console.log(`model-findMidRelationByIngredientId-midId: ${midId}`)
-        
-        // IF not in mid table, just insert ids and data into it
-        if(!midId) {
-            let midId = await db('recipe_ingredients').insert({
-                recipeId: ingredientData.recipeId,
-                ingredientId: ingredientId,
-                amount: ingredientData.amount
-            })
+    console.log(`model - handleOneId: ${ingredient} - check`)
+    return ingredient
+};
 
-            console.log(`model-insertRecipeIngredient-id: ${midId}`)
-            ingredient = await findIngredientDataByMidId(id)
-            console.log(`model-insertRecipeIngredient-ingredient: ${ingredient}`)
-            return ingredient
-        } else {
-            console.log('model-insertRecipeIngredient: That ingredient already exists in this recipe.')
-            return findIngredientDataByMidId(midId)
-        }
+async function handleNeither(ingredientData) {
+    console.log('HANDLE NEITHER')
+    let ingredientId = await db('ingredients')
+    .insert({
+        ingredientName: ingredientData.ingredientName
+    })
+    // console.log(ingredientId[0])
+    let midId = await db('recipe_ingredients')
+    .insert({
+        recipeId: ingredientData.recipeId,
+        ingredientId: ingredientId[0],
+        amount: ingredientData.amount
+    })
+    // console.log(midId[0])
+    let ingredient = {
+        ingredientId: ingredientId[0],
+        ingredientName: ingredientData.ingredientName,
+        amount: ingredientData.amount,
+        midId: midId[0],
+        recipeId: ingredientData.recipeId
+    }
+
+    console.log(`model - handleNeither: ${ingredient} - check`)
+    return ingredient
+};
+
+// Function to insert an ingredient into a recipe
+async function insertRecipeIngredient(ingredientData) {
+    console.log(`ENTERING INSERT: `)
+
+    let foundIngredient = await db('ingredients')
+    .where({ ingredientName: ingredientData.ingredientName }).first()
+    let foundMid = null
+
+    if(foundIngredient) {
+        console.log('finding foungMid...')
+        foundMid = await db('recipe_ingredients')
+        .where({
+             ingredientId: foundIngredient.id,
+             recipeId: ingredientData.recipeId
+            }).first()
+        console.log(foundMid)
+    }
+    
+    if(foundIngredient && foundMid) {
+        console.log(`recipeId: ${ingredientData.recipeId}, ingredientId: ${foundIngredient.id}, foundMid: ${foundMid.id}`)
+        return handleBothIds(foundIngredient, foundMid)
+    }
+
+    if(foundIngredient && !foundMid) {
+        return handleOneId(foundIngredient, ingredientData)
+    }
+
+    if(!foundIngredient && !foundMid) {
+        return handleNeither(ingredientData)
     }
 };
+
+// Function to remove an ingredient in a recipe
+async function removeRecipeIngredient(recipeId, ingredientId) {
+    console.log('model-removeRecipeIngredient: removing...')
+    console.log(ingredientId, recipeId)
+    return db('recipe_ingredients').where({
+        ingredientId: ingredientId,
+        recipeId: recipeId
+    }).del()
+}
