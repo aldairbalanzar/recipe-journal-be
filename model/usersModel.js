@@ -6,7 +6,9 @@ module.exports = {
     findUserById,
     updateUserData,
     removeUser,
-}
+};
+
+
 async function findUserByUsername(username) {
     const user = await db('users').where(username)
 
@@ -20,7 +22,8 @@ async function insertUser(userData) {
         password: userData.password,
         created: new Date(),
         updated: new Date()
-    }).into('users')
+    })
+    console.log(`id: ${id}`)
     console.log('usersModel-insertUser: check')
     return findUserById(id)
 };
@@ -29,7 +32,7 @@ async function insertUser(userData) {
 async function findUserById(userId) {
     const user = await db('users').where('id', userId).first()
     return user
-}
+};
 
 async function updateUserData(userId, changes) {
     const id = await db('users')
