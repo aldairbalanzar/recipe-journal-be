@@ -52,7 +52,7 @@ async function findUserRecipes(userId) {
 async function insertRecipe(recipeData) {
     console.log(`model-insertRecipe: inserting... ${recipeData.id}`)
     const result = await db('recipes').insert({
-        id: recipeData.id,
+        id: uuidv4(),
         userId: recipeData.userId,
         recipeName: recipeData.recipeName,
         description: recipeData.description,
@@ -62,7 +62,7 @@ async function insertRecipe(recipeData) {
         yields: recipeData.yields,
         created: new Date()
     })
-   return findUserRecipes(recipeData.id)
+   return findUserRecipes(recipeData.userId)
 };
 
 async function updateRecipe(recipeData) {
