@@ -11,8 +11,8 @@ exports.up = function(knex) {
             .notNullable();
             users.text('imageURL');
             users.string('created')
-            users.string('updated')
             .notNullable()
+            users.string('updated')
         })
 
         //recipes
