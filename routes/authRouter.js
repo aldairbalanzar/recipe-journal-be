@@ -42,7 +42,7 @@ router.post('/login', handleUserData, (req, res) => {
             id: ${id},
             username: ${username}
         `)
-        res.status(200).json({ message: 'successfuly logged in!', user: id, username, token })
+        res.status(200).json({ message: 'successfuly logged in!', id, username, token })
     })
     .catch(err => {
         console.log(`/login-POST-catch: ${err}`)

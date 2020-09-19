@@ -47,7 +47,7 @@ async function updateUserData(userId, changes) {
             updated: new Date()
         })
         console.log('model-updateUserData: check')
-        return findUserById(id)
+        return findUserById(id[0])
 };
 
 function removeUser(userId) {
