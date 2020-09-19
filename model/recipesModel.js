@@ -86,7 +86,6 @@ function removeRecipe(recipeId) {
 
 // Steps
 async function findStepById(stepId) {
-    stepId = parseInt(stepId)
     const step = await db('steps').where('id', stepId)
     console.log('model-findStepById: check')
     return step
