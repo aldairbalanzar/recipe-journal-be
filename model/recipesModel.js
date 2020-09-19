@@ -62,7 +62,7 @@ async function insertRecipe(recipeData) {
         yields: recipeData.yields,
         created: new Date()
     })
-   return findUserRecipes(recipeData.userId)
+   return findUserRecipes(recipeData.id)
 };
 
 async function updateRecipe(recipeData) {
