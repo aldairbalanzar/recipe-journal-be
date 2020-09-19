@@ -30,11 +30,13 @@ async function findAllRecipes() {
 }
 
 async function findRecipeById(recipeId) {
+    recipeId = parseInt(recipeId)
     const recipe = await db('recipes').where('id', recipeId).first()
     return recipe
 };
 
 async function findUserRecipes(userId) {
+    userId = parseInt(userId)
     const arr = await db('recipes').where('userId', userId);
 
     let recipes = [...arr]
@@ -63,6 +65,7 @@ async function insertRecipe(recipeData) {
 
 async function updateRecipe(recipeData) {
     console.log('model-updateRecipe: updating...')
+    recipeData.id = parseInt(recipeData.id)
     const result = await db('recipes')
         .where('id', recipeData.id)
         .update({
@@ -79,6 +82,7 @@ async function updateRecipe(recipeData) {
 
 function removeRecipe(recipeId) {
     console.log('model-removeRecipe: removing...')
+    recipeId = parseInt(recipeId)
     return db('recipes')
         .where('id', recipeId)
         .del()
@@ -87,6 +91,7 @@ function removeRecipe(recipeId) {
 
 // Steps
 async function findStepById(stepId) {
+    stepId = parseInt(stepId)
     const step = await db('steps').where('id', stepId)
     console.log('model-findStepById: check')
     return step
@@ -127,6 +132,7 @@ async function updateRecipeStep(stepData) {
 
 function removeRecipeStep(stepId) {
     console.log('model-removeRecipeStep: removing...')
+    stepId = parseInt(stepId)
     return db('steps')
         .where('id', stepId)
         .del()
