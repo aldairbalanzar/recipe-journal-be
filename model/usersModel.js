@@ -22,7 +22,7 @@ async function insertUser(userData) {
         password: userData.password,
         created: new Date(),
         updated: new Date()
-    }).returning('id')
+    }).returning(['id'])
     console.log(`id: ${id}`)
     console.log('usersModel-insertUser: check')
     return findUserById(id)
