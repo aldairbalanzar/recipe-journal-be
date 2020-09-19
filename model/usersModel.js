@@ -30,7 +30,8 @@ async function insertUser(userData) {
 
 
 async function findUserById(userId) {
-    console.log(userId[0])
+    console.log(userId)
+    console.log(typeof(userId))
     const user = await db('users').where('id', userId).first()
     return user
 };
