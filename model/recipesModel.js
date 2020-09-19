@@ -76,8 +76,8 @@ async function updateRecipe(recipeData) {
 };
 
 function removeRecipe(recipeId) {
+    console.log(`recipeId: ${recipeId}`)
     console.log('model-removeRecipe: removing...')
-    recipeId = parseInt(recipeId)
     return db('recipes')
         .where('id', recipeId)
         .del()
