@@ -23,6 +23,7 @@ async function insertUser(userData) {
         created: new Date(),
         updated: new Date()
     }).returning('id')
+    
     console.log(`id: ${id}`)
     console.log('usersModel-insertUser: check')
     return findUserById(id)
@@ -30,7 +31,6 @@ async function insertUser(userData) {
 
 
 async function findUserById(userId) {
-    userId = parseInt(userId)
     console.log(userId)
     console.log(typeof(userId))
     const user = await db('users').where('id', userId).first()
