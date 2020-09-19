@@ -6,15 +6,6 @@ module.exports = {
     findUserById,
     updateUserData,
     removeUser,
-    // findRecipeById,
-    // updateRecipe,
-    // removeRecipe,
-    // insertStep,
-    // updateStep,
-    // removeStep,
-    // insertIngredient,
-    // updateIngredient,
-    // removeIngredient
 }
 async function findUserByUsername(username) {
     const user = await db('users').where(username)
