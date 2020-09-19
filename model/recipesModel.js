@@ -31,22 +31,20 @@ async function findAllRecipes() {
 }
 
 async function findRecipeById(recipeId) {
-    recipeId = parseInt(recipeId)
     const recipe = await db('recipes').where('id', recipeId).first()
     return recipe
 };
 
 async function findUserRecipes(userId) {
-    userId = parseInt(userId)
     const arr = await db('recipes').where('userId', userId);
 
-    let recipes = [...arr]
-    for(let i = 0; i < arr.length; i++){
-        let recipeId = arr[i].id;
-        recipes[i] = await findRecipeById(recipeId);
-    }
-    console.log('model-findUserRecipes: check')
-    return recipes;
+    // let recipes = [...arr]
+    // for(let i = 0; i < arr.length; i++){
+    //     let recipeId = arr[i].id;
+    //     recipes[i] = await findRecipeById(recipeId);
+    // }
+    console.log(`model-findUserRecipes: ${arr} - check`)
+    return arr;
 };
 
 async function insertRecipe(recipeData) {
