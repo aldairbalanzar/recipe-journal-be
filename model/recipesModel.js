@@ -103,7 +103,7 @@ async function insertRecipeStep(stepData) {
         id: stepData.id,
         recipeId: stepData.recipeId,
         stepNum: stepData.stepNum,
-        stepInstruction: stepData.instruction
+        stepInstruction: stepData.stepInstruction
     })
     return findStepById(id[0])
     
