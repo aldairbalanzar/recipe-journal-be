@@ -18,12 +18,13 @@ async function findUserByUsername(username) {
 
 async function insertUser(userData) {
     const id = await db('users').insert({
+        id: userData.id,
         username: userData.username,
         password: userData.password,
         created: new Date(),
         updated: new Date()
     }).returning('id')
-    
+
     console.log(`id: ${id}`)
     console.log('usersModel-insertUser: check')
     return findUserById(id)
