@@ -37,12 +37,7 @@ async function findRecipeById(recipeId) {
 
 async function findUserRecipes(userId) {
     const arr = await db('recipes').where('userId', userId);
-
-    // let recipes = [...arr]
-    // for(let i = 0; i < arr.length; i++){
-    //     let recipeId = arr[i].id;
-    //     recipes[i] = await findRecipeById(recipeId);
-    // }
+    
     console.log(`model-findUserRecipes: ${arr} - check`)
     return arr;
 };

@@ -2,6 +2,7 @@ const router = require('express').Router();
 const authenticateRequest = require('../middleware/authenticateRequest');
 const handleIngredientData = require('../middleware/handleIngredientData');
 const handleRecipeData = require('../middleware/handleRecipeData');
+const handleUpdateRecipe = require('../middleware/handleUpdateRecipe');
 const handleStepData = require('../middleware/handleStepData');
 const Recipes = require('../model/recipesModel');
 
@@ -61,7 +62,7 @@ router.post('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
     })
 });
 
-router.put('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
+router.put('/:userId', authenticateRequest, handleUpdateRecipe, (req, res) => {
     let { recipeData } = req.body
 
     Recipes.updateRecipe(recipeData)
