@@ -27,13 +27,13 @@ async function insertUser(userData) {
 
     console.log(`id: ${id}`)
     console.log('usersModel-insertUser: check')
-    return findUserById(id)
+    return findUserById(id[0])
 };
 
 
 async function findUserById(userId) {
     console.log(userId)
-    console.log(typeof(userId))
+    console.log(typeof(userId), userId.id)
     const user = await db('users').where('id', userId).first()
     return user
 };
