@@ -59,7 +59,7 @@ function generateToken(user) {
     };
     const secret = secrets.jwtSecret;
     const options = {
-      expiresIn: 1000 * 60 * 1
+      expiresIn: '1h'
     };
     
     console.log('generateToken: check')
