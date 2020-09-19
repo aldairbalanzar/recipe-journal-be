@@ -104,7 +104,7 @@ async function insertRecipeStep(stepData) {
         recipeId: stepData.recipeId,
         stepNum: stepData.stepNum,
         stepInstruction: stepData.stepInstruction
-    })
+    }).returning('id')
     return findStepById(id[0])
     
 };
@@ -120,7 +120,7 @@ async function updateRecipeStep(stepData) {
         .update({
             stepNum: stepData.stepNum,
             stepInstruction: stepData.instruction
-        })
+        }).returning('id')
         console.log(`RESULT: ${result}`)
         return findRecipeSteps(stepData.recipeId)
 };

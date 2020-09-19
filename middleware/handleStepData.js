@@ -15,7 +15,7 @@ function handleStepData(req, res, next) {
     id: ${req.body.stepData.id},
     recipeId: ${req.body.stepData.recipeId},
     stepNum: ${req.body.stepData.stepNum},
-    instruction: ${req.body.stepData.instruction}
+    stepInstruction: ${req.body.stepData.stepInstruction}
     `)
     next()
 }
