@@ -1,8 +1,11 @@
+const { v4: uuidv4 } = require('uuid');
+
 function handleRecipeData(req, res, next) {
     let { userId } = req.params;
     let { id, recipeName, description, imageURL, prepTime, cookTime, yields } = req.body;
 
     req.body.recipeData = {
+        id: uuidv4(),
         userId: userId,
         recipeName: recipeName,
         description: description,

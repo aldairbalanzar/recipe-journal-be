@@ -52,7 +52,7 @@ async function findUserRecipes(userId) {
 async function insertRecipe(recipeData) {
     console.log(`model-insertRecipe: inserting... ${recipeData.id}`)
     const result = await db('recipes').insert({
-        id: uuidv4(),
+        id: recipeData.id,
         userId: recipeData.userId,
         recipeName: recipeData.recipeName,
         description: recipeData.description,
