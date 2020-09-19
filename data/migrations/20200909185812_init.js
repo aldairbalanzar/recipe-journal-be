@@ -40,7 +40,7 @@ exports.up = function(knex) {
         .createTable('steps', steps => {
             steps.string('id')
             .unique()
-            steps.integer('recipeId', 255)
+            steps.string('recipeId', 255)
             .references('recipes.id')
             .onDelete('CASCADE')
             .onUpdate('CASCADE');
