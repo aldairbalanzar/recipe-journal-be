@@ -20,7 +20,7 @@ exports.up = function(knex) {
         .createTable('recipes', recipes => {
             recipes.string('id')
             .unique()
-            recipes.integer('userId', 255)
+            recipes.string('userId', 255)
             .notNullable()
             .references('users.id')
             .onDelete('CASCADE')
