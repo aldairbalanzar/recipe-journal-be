@@ -59,13 +59,13 @@ exports.up = function(knex) {
         .createTable('recipe_ingredients', recipe_ingredients => {
             recipe_ingredients.string('id')
             //recipeId
-            recipe_ingredients.integer('recipeId', 255)
+            recipe_ingredients.string('recipeId', 255)
             .notNullable()
             .references('recipes.id')
             .onDelete('CASCADE')
             .onUpdate('CASCADE');
             //ingredientId
-            recipe_ingredients.integer('ingredientId')
+            recipe_ingredients.string('ingredientId')
             .notNullable()
             .references('ingredients.id')
             .onDelete('CASCADE')
