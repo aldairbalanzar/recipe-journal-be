@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 const db = require('../data/db-config');
 
 module.exports = {
@@ -51,6 +52,7 @@ async function findUserRecipes(userId) {
 async function insertRecipe(recipeData) {
     console.log('model-insertRecipe: inserting...')
     const result = await db('recipes').insert({
+        id: recipeData.id,
         userId: recipeData.userId,
         recipeName: recipeData.recipeName,
         description: recipeData.description,
@@ -106,11 +108,12 @@ async function findRecipeSteps(recipeId) {
 async function insertRecipeStep(stepData) {
     console.log('model-insertRecipeStep: inserting...')
     const id = await db('steps').insert({
+        id: stepData.id,
         recipeId: stepData.recipeId,
         stepNum: stepData.stepNum,
         stepInstruction: stepData.instruction
     })
-    return findStepById(id)
+    return findStepById(id[0])
     
 };
 
@@ -132,7 +135,6 @@ async function updateRecipeStep(stepData) {
 
 function removeRecipeStep(stepId) {
     console.log('model-removeRecipeStep: removing...')
-    stepId = parseInt(stepId)
     return db('steps')
         .where('id', stepId)
         .del()
@@ -142,35 +144,12 @@ function removeRecipeStep(stepId) {
 // Ingredients
 
             // GET
-// Function to find ingredientId with just ingredientName
-async function findIngredientDataByIngredientName(ingredientName) {
-    console.log(`ingredientName: ${ingredientName}`)
-    const ingredient = await db('ingredients').where({ ingredientName })
-    console.log(`model-findIngredientDataByIngredientName - check`)
-    if(ingredient.length === 0) {
-        return null
-    } else {
-
-        return ingredient
-    }
-};
-
 // Function to find ingredientName with just ingredientId
 async function findIngredientNameByIngredientId(ingredientId) {
     const ingredient = await db('ingredients').where('id', ingredientId).first()
     console.log(`model-findIngredientNameByIngredientId - check`)
     const { ingredientName } = ingredient
     return ingredientName
-};
-
-// Function to find midId by recipeId and ingredientId
-async function findMidIdByIds(recipeId, foundIngredient) {
-    let midObject = await db('recipe_ingredients').where({
-        recipeId: recipeId,
-        ingredientId: foundIngredient.id
-    }).first()
-    console.log(`model-findMidIdByIds - ${midObject} check`)
-    return midObject
 };
 
 // Function to find ingredient data by midId
@@ -225,10 +204,11 @@ async function handleOneId(foundIngredient, ingredientData) {
     console.log(ingredientData)
     let midId = await db('recipe_ingredients')
     .insert({
+        id: uuidv4(),
         recipeId: ingredientData.recipeId,
         ingredientId: foundIngredient.id,
         amount: ingredientData.amount
-    })
+    }).returning('id')
     console.log('midId: ', midId)
     let ingredient = {
         ingredientId: foundIngredient.id,
@@ -246,15 +226,17 @@ async function handleNeither(ingredientData) {
     console.log('HANDLE NEITHER')
     let ingredientId = await db('ingredients')
     .insert({
+        id: uuidv4(),
         ingredientName: ingredientData.ingredientName
-    })
+    }).returning('id')
     // console.log(ingredientId[0])
     let midId = await db('recipe_ingredients')
     .insert({
+        id: uuidv4(),
         recipeId: ingredientData.recipeId,
         ingredientId: ingredientId[0],
         amount: ingredientData.amount
-    })
+    }).returning('id')
     // console.log(midId[0])
     let ingredient = {
         ingredientId: ingredientId[0],
