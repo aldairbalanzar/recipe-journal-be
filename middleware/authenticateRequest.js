@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
   let { userId } = req.params;
 
     jwt.verify(token, secret, (error, decodedToken) => {
-        if(parseInt(userId) !== decodedToken.id) {
+        if(userId !== decodedToken.id) {
             console.log('Requested data does not belong to logged in user.')
             res.status(400).json({ errorMessage: 'Requested data does not belong to logged in user.'})
         } else{
