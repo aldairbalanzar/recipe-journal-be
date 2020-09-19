@@ -37,7 +37,7 @@ async function findRecipeById(recipeId) {
 
 async function findUserRecipes(userId) {
     const arr = await db('recipes').where('userId', userId);
-    
+
     console.log(`model-findUserRecipes: ${arr} - check`)
     return arr;
 };
@@ -60,7 +60,7 @@ async function insertRecipe(recipeData) {
 
 async function updateRecipe(recipeData) {
     console.log('model-updateRecipe: updating...')
-    recipeData.id = parseInt(recipeData.id)
+    console.log(recipeData)
     const result = await db('recipes')
         .where('id', recipeData.id)
         .update({
