@@ -12,7 +12,7 @@ function handleIngredientData(req, res, next) {
         amount: amount
     }
     console.log(`middleware-handleIngredientData: check`)
-    // console.log(req.body.ingredientData)
+    console.log(req.body.ingredientData)
     next()
 }
 

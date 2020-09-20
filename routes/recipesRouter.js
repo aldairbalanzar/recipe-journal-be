@@ -201,6 +201,7 @@ router.post('/:userId/:recipeId/ingredients', authenticateRequest, handleIngredi
         ingredientName: ingredientName,
         amount: amount
     }
+    console.log(`POST ROUTE: ${ingredientData}`)
     Recipes.insertRecipeIngredient(ingredientData)
     .then(response => {
         if(typeof(response) === 'string') {
