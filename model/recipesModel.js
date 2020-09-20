@@ -119,7 +119,7 @@ async function updateRecipeStep(stepData) {
         })
         .update({
             stepNum: stepData.stepNum,
-            stepInstruction: stepData.instruction
+            stepInstruction: stepData.stepInstruction
         }).returning('id')
         console.log(`RESULT: ${result}`)
         return findRecipeSteps(stepData.recipeId)

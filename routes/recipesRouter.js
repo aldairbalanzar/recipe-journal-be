@@ -4,6 +4,7 @@ const handleIngredientData = require('../middleware/handleIngredientData');
 const handleRecipeData = require('../middleware/handleRecipeData');
 const handleUpdateRecipe = require('../middleware/handleUpdateRecipe');
 const handleStepData = require('../middleware/handleStepData');
+const handleUpdateStep = require('../middleware/handleUpdateStep');
 const Recipes = require('../model/recipesModel');
 
 
@@ -135,8 +136,7 @@ router.post('/:userId/:recipeId/steps', authenticateRequest, handleStepData, (re
     })
 });
 
-router.put('/:userId/:recipeId/steps/:stepId', authenticateRequest, handleStepData, (req, res) => {
-    let { stepId } = req.params
+router.put('/:userId/:recipeId/steps', authenticateRequest, handleUpdateStep, (req, res) => {
     let { stepData } = req.body
 
     Recipes.updateRecipeStep(stepData, stepId)

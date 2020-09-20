@@ -1,4 +1,4 @@
-function handleRecipeData(req, res, next) {
+function handleUpdateRecipe(req, res, next) {
     let { userId } = req.params;
     let { id, recipeName, description, imageURL, prepTime, cookTime, yields } = req.body;
 
@@ -13,8 +13,8 @@ function handleRecipeData(req, res, next) {
         yields: yields,
         updated: new Date()
     }
-    console.log(`middleware-handleUpdateRecipe: check`)
+    console.log(`middleware-handleUpdateRecipe: ${req.body.recipeData} - check`)
     next()
 }
 
-module.exports = handleRecipeData;
+module.exports = handleUpdateRecipe;

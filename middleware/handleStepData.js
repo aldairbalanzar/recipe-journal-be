@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require('uuid');
 
 function handleStepData(req, res, next) {
     let { recipeId } = req.params
-    let { stepNum, stepInstruction } = req.body;
+    let { id, stepNum, stepInstruction } = req.body;
 
     req.body.stepData = {
         id: uuidv4(),
