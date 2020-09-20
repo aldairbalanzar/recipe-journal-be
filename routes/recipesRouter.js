@@ -139,7 +139,7 @@ router.post('/:userId/:recipeId/steps', authenticateRequest, handleStepData, (re
 router.put('/:userId/:recipeId/steps', authenticateRequest, handleUpdateStep, (req, res) => {
     let { stepData } = req.body
 
-    Recipes.updateRecipeStep(stepData, stepId)
+    Recipes.updateRecipeStep(stepData)
     .then(response => {
         if(response > 0){
             console.log(`
