@@ -218,10 +218,10 @@ async function handleNeither(ingredientData) {
     console.log('HANDLE NEITHER')
     let ingredientId = await db('ingredients')
     .insert({
-        id: uuidv4(),
+        id: ingredientData.id,
         ingredientName: ingredientData.ingredientName
     }).returning('id')
-    // console.log(ingredientId[0])
+    console.log(`ingredientId${ingredientId[0]}`)
     let midId = await db('recipe_ingredients')
     .insert({
         id: uuidv4(),
@@ -229,7 +229,7 @@ async function handleNeither(ingredientData) {
         ingredientId: ingredientId[0],
         amount: ingredientData.amount
     }).returning('id')
-    // console.log(midId[0])
+    console.log(`midId: ${midId[0]}`)
     let ingredient = {
         ingredientId: ingredientId[0],
         ingredientName: ingredientData.ingredientName,
@@ -251,7 +251,7 @@ async function insertRecipeIngredient(ingredientData) {
     let foundMid = null
 
     if(foundIngredient) {
-        console.log('finding foungMid...')
+        console.log('finding foundMid...')
         foundMid = await db('recipe_ingredients')
         .where({
              ingredientId: foundIngredient.id,
