@@ -195,8 +195,9 @@ router.get('/:recipeId/ingredients', (req, res) => {
 
 router.post('/:userId/:recipeId/ingredients', authenticateRequest, handleIngredientData, (req, res) => {
     const { recipeId } = req.params
-    const { ingredientName, amount } = req.body.ingredientData
+    const { id, ingredientName, amount } = req.body.ingredientData
     let ingredientData = {
+        id: id,
         recipeId: recipeId,
         ingredientName: ingredientName,
         amount: amount
