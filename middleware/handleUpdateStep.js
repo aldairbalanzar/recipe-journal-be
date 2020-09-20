@@ -1,9 +1,10 @@
 function handleUpdateStep(req, res, next) {
-    let { userId } = req.params
+    let { recipeId } = req.params
     let { id, stepNum, stepInstruction } = req.body
 
     req.body.stepData = {
         id: id,
+        recipeId: recipeId,
         stepNum: stepNum,
         stepInstruction: stepInstruction
     }
