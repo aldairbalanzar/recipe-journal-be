@@ -192,11 +192,14 @@ async function handleBothIds(foundIngredient, foundMid) {
 
 async function handleOneId(foundIngredient, ingredientData) {
     console.log('HANDLE ONE')
-    console.log(foundIngredient)
-    console.log(ingredientData)
+    let newMidId = uuidv4()
+    console.log(
+        newMidId
+    )
+
     let midId = await db('recipe_ingredients')
     .insert({
-        id: uuidv4(),
+        id: midId,
         recipeId: ingredientData.recipeId,
         ingredientId: foundIngredient.id,
         amount: ingredientData.amount
@@ -216,15 +219,22 @@ async function handleOneId(foundIngredient, ingredientData) {
 
 async function handleNeither(ingredientData) {
     console.log('HANDLE NEITHER')
+    let newIngredientId = uuidv4()
+    let newMidId = uuidv4()
+    console.log(
+        newIngredientId,
+        newMidId
+    )
+
     let ingredientId = await db('ingredients')
     .insert({
-        id: ingredientData.id,
+        id: newIngredientId,
         ingredientName: ingredientData.ingredientName
     }).returning('id')
     console.log(`ingredientId${ingredientId[0]}`)
     let midId = await db('recipe_ingredients')
     .insert({
-        id: uuidv4(),
+        id: newMidId,
         recipeId: ingredientData.recipeId,
         ingredientId: ingredientId[0],
         amount: ingredientData.amount
