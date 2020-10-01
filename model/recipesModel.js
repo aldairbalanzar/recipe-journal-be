@@ -81,7 +81,7 @@ function removeRecipe(recipeId, userId) {
     let deleted = db('recipes')
                 .where('id', recipeId)
                 .del()
-    return findUserRecipes(userid)
+    return findUserRecipes(userId)
 };
 
 
