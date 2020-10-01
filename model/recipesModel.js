@@ -75,12 +75,13 @@ async function updateRecipe(recipeData) {
         return findRecipeById(recipeData.id)
 };
 
-function removeRecipe(recipeId) {
+function removeRecipe(recipeId, userId) {
     console.log(`recipeId: ${recipeId}`)
     console.log('model-removeRecipe: removing...')
-    return db('recipes')
-        .where('id', recipeId)
-        .del()
+    let deleted = db('recipes')
+                .where('id', recipeId)
+                .del()
+    return findUserRecipes(userid)
 };
 
 
