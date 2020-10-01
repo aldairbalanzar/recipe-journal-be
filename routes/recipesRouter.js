@@ -90,9 +90,9 @@ router.put('/:userId', authenticateRequest, handleUpdateRecipe, (req, res) => {
 });
 
 router.delete('/:userId/:recipeId', authenticateRequest, (req, res) => {
-    let { recipeId } = req.params
+    let { recipeId, userId } = req.params
 
-    Recipes.removeRecipe(recipeId)
+    Recipes.removeRecipe(recipeId, userId)
     .then(response => {
         console.log('Recipe deleted!')
         res.status(200).json({ message: 'Recipe successfuly deleted.', response })
