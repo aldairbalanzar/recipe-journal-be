@@ -75,10 +75,10 @@ async function updateRecipe(recipeData) {
         return findRecipeById(recipeData.id)
 };
 
-function removeRecipe(recipeId, userId) {
+async function removeRecipe(recipeId, userId) {
     console.log(`recipeId: ${recipeId}`)
     console.log('model-removeRecipe: removing...')
-    let deleted = db('recipes')
+    let deleted = await db('recipes')
                 .where('id', recipeId)
                 .del()
     return findUserRecipes(userId)
