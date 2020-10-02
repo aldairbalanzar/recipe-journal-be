@@ -30,14 +30,28 @@ router.get('/:userId', authenticateRequest, (req, res) => {
         found recipes!
             recipes: ${recipes}
         `)
-        res.status(200).json({ message: 'Here are your recipes.', recipes})
+        res.status(200).json({ message: 'Here are your recipes.', recipes })
     })
     .catch(err => {
         console.log(`/recipes/userId-GET-catch: ${err}`)
-        res.status(500).json({ errorMessage: 'Could not get recipes, something went wrong...'})
+        res.status(500).json({ errorMessage: 'Could not get recipes, something went wrong...' })
     })
 
 });
+
+router.get('/:userId/:recipeId', authenticateRequest, (req, res) => {
+    let { userId, recipeId } = req.params;
+
+    Recipes.findRecipeDataByRecipeId(userId, recipeId)
+    .then(recipe => {
+        console.log(`findRecipeDataByRecipeId: ${recipe}`)
+        res.status(200).json({ message: 'Here is that recipe!', recipe })
+    })
+    .catch(err => {
+        console.log(`/recipes/userId/recipeId-GET-catch: ${err}`)
+        res.status(500).json({ errorMessage: 'Could not get that recipe, something went wront...' })
+    })
+})
 
 router.post('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
     let { recipeData } = req.body;

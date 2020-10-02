@@ -3,6 +3,7 @@ const db = require('../data/db-config');
 
 module.exports = {
     findRecipeById,
+    findRecipeDataByRecipeId,
     findUserRecipes,
     
     insertRecipe,
@@ -28,6 +29,20 @@ async function findAllRecipes() {
     const recipes = await db('recipes')
     console.log('model-findAllRecipes: check')
     return recipes
+};
+
+async function findRecipeDataByRecipeId(recipeId) {
+    const recipe = await db('recipes').where('id', recipeId)
+    const steps = await db('steps').where('recipeId', recipeId)
+    const ingredients = await db('recipe_ingredients').where('recipeId', recipeId)
+    let recipeData = {
+        ...recipe,
+        ...steps,
+        ...ingredients
+    }
+
+    console.log(`model-findRecipeDataByRecipeId: ${recipeData}`)
+    return recipeData
 }
 
 async function findRecipeById(recipeId) {
