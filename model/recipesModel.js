@@ -72,7 +72,7 @@ async function updateRecipe(recipeData) {
             yields: recipeData.yields,
             updated: recipeData.updated
         })
-        return findRecipeById(recipeData.id)
+        return findUserRecipes(recipeData.userId)
 };
 
 async function removeRecipe(recipeId, userId) {
