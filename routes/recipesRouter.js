@@ -40,9 +40,9 @@ router.get('/:userId', authenticateRequest, (req, res) => {
 });
 
 router.get('/:userId/:recipeId', authenticateRequest, (req, res) => {
-    let { userId, recipeId } = req.params;
+    let { recipeId } = req.params;
 
-    Recipes.findRecipeDataByRecipeId(userId, recipeId)
+    Recipes.findRecipeDataByRecipeId(recipeId)
     .then(recipe => {
         console.log(`findRecipeDataByRecipeId: ${recipe}`)
         res.status(200).json({ message: 'Here is that recipe!', recipe })
