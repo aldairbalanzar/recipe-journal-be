@@ -67,21 +67,10 @@ router.put('/:userId', authenticateRequest, handleUpdateRecipe, (req, res) => {
     let { recipeData } = req.body
 
     Recipes.updateRecipe(recipeData)
-    .then(updatedRecipe => {
+    .then(recipes => {
         console.log(`
-        updatedRecipe:
-            id: ${updatedRecipe.id},
-            user_id: ${updatedRecipe.userId},
-            recipeName: ${updatedRecipe.recipeName},
-            description: ${updatedRecipe.description},
-            imageURL: ${updatedRecipe.imageURL},
-            prepTime: ${updatedRecipe.prepTime},
-            cookTime: ${updatedRecipe.cookTime},
-            yields: ${updatedRecipe.yields},
-            updated: ${updatedRecipe.updated}
-
-    `)
-        res.status(201).json({ message: 'Recipe has been updated!', updatedRecipe})
+        updatedRecipe: UPDATED!`)
+        res.status(201).json({ message: 'Recipe has been updated!', recipes})
     })
     .catch(err => {
         console.log(`/recipes/userId-PUT-catch: ${err}`)
