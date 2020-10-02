@@ -36,9 +36,9 @@ async function findRecipeDataByRecipeId(recipeId) {
     const steps = await db('steps').where('recipeId', recipeId)
     const ingredients = await db('recipe_ingredients').where('recipeId', recipeId)
     let recipeData = {
-        ...recipe[0],
-        ...steps[0],
-        ...ingredients[0]
+        recipe: {...recipe[0]},
+        steps: {...steps[0]},
+        ingredients: {...ingredients[0]}
     }
 
     console.log(recipeData)
