@@ -41,7 +41,7 @@ async function findRecipeDataByRecipeId(recipeId) {
         ingredients: [...ingredients]
     }
 
-    console.log(recipeData)
+    console.log('findRecipeDataByRecipeId', recipeData)
     return recipeData
 }
 
