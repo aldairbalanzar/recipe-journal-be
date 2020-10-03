@@ -45,6 +45,7 @@ router.get('/:userId/:recipeId', authenticateRequest, (req, res) => {
     Recipes.findRecipeDataByRecipeId(recipeId)
     .then(recipe => {
         console.log(`findRecipeDataByRecipeId: ${recipe}`)
+        console.log(recipe)
         res.status(200).json({ message: 'Here is that recipe!', recipe })
     })
     .catch(err => {
