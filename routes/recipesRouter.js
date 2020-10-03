@@ -128,11 +128,11 @@ router.post('/:userId/:recipeId/steps', authenticateRequest, handleStepData, (re
     let { stepData } = req.body
 
     Recipes.insertRecipeStep(stepData)
-    .then(response => {
+    .then(steps => {
         console.log(`
         Step added!
-            ${response}`)
-        res.status(201).json({ message: 'Step successfuly added to recipe!', response})
+            ${steps}`)
+        res.status(201).json({ message: 'Step successfuly added to recipe!', steps})
     })
     .catch(err => {
         console.log(`/recipes/userId/recipeId/steps: ${err}`)
