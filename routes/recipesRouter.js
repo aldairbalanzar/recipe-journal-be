@@ -59,7 +59,7 @@ router.post('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
     let { recipeData } = req.body;
     const imageFile = req.files.photo;
 
-    console.log('file: ', imageFile);
+    console.log('\n***FILE: ', imageFile);
 
     cloudinary.uploader.upload(imageFile.tempFilePath, (err, result) => {
         Users.updateRecipePic({ imageURL: result.url }, recipeId)
