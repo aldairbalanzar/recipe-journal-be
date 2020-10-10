@@ -6,6 +6,7 @@ const handleUpdateRecipe = require('../middleware/handleUpdateRecipe');
 const handleStepData = require('../middleware/handleStepData');
 const handleUpdateStep = require('../middleware/handleUpdateStep');
 const Recipes = require('../model/recipesModel');
+const cloudinary = require('../cloudinaryConfig');
 
 
 // Recipes
@@ -56,6 +57,20 @@ router.get('/:userId/:recipeId', authenticateRequest, (req, res) => {
 
 router.post('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
     let { recipeData } = req.body;
+    const imageFile = req.files.photo;
+
+    console.log('file: ', imageFile);
+
+    cloudinary.uploader.upload(imageFile.tempFilePath, (err, result) => {
+        Users.updateRecipePic({ imageURL: result.url }, recipeId)
+        .then(result => {
+            res.json({ success: true, result });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ message: 'Error uploading to Cloudinary' });
+        });
+    });
     
     Recipes.insertRecipe(recipeData)
     .then(recipes => {
