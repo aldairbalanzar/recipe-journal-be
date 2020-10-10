@@ -110,7 +110,7 @@ router.put('/:userId/:recipeId/image', authenticateRequest, (req, res) => {
 
     let { formData } = req.body
 
-    console.log('\n***FILE: ', formData);
+    console.log('\n***FILE: ', req.body.get('photo'));
     // console.log(formData.get('photo'))
 
     cloudinary.uploader.upload(formData.tempFilePath, (err, result) => {
