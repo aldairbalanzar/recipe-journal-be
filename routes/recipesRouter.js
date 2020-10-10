@@ -102,7 +102,7 @@ router.put('/:userId/:recipeId/image', authenticateRequest, (req, res) => {
     console.log('INSERTING IMAGE...')
     console.log('files: ', req.files)
     console.log('body: ', req.body)
-    let file = req.files.image
+    
     let { imageFile } = req.params
 
     console.log('\n***FILE: ', imageFile);
