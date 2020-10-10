@@ -57,10 +57,9 @@ router.get('/:userId/:recipeId', authenticateRequest, (req, res) => {
 })
 
 router.post('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
-    let { recipeData } = req.body;
-    const imageFile = req.body.file;
+    let { recipeData, file } = req.body
 
-    console.log('\n***FILE: ', imageFile);
+    console.log('\n***FILE: ', file);
 
     cloudinaryConfig.uploader.upload(imageFile.tempFilePath, (err, result) => {
         console.log('result: ', result)
