@@ -100,12 +100,14 @@ router.put('/:userId', authenticateRequest, handleUpdateRecipe, (req, res) => {
 // For recipe image
 router.put('/:userId/:recipeId/image', authenticateRequest, (req, res) => {
     console.log('INSERTING IMAGE...')
+    console.log('files: ', req.files)
+    console.log('body: ', req.body)
     let file = req.files.image
-    let { recipeId } = req.params
+    let { imageFile } = req.params
 
-    console.log('\n***FILE: ', file);
+    console.log('\n***FILE: ', imageFile);
 
-    cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
+    cloudinary.uploader.upload(imageFile.tempFilePath, (err, result) => {
         console.log('result: ', result)
         console.log('url: ', result.url)
         let imageURL = result.url
