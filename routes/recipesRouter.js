@@ -105,7 +105,6 @@ router.put('/:userId', authenticateRequest, handleUpdateRecipe, (req, res) => {
 // For recipe image
 router.put('/:userId/:recipeId/image', authenticateRequest, (req, res) => {
     console.log('INSERTING IMAGE...')
-    console.log('req: ', req)
     console.log('files: ', req.files)
     console.log('body: ', req.body)
 
