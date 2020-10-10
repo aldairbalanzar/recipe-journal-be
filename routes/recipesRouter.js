@@ -7,12 +7,8 @@ const handleStepData = require('../middleware/handleStepData');
 const handleUpdateStep = require('../middleware/handleUpdateStep');
 const Recipes = require('../model/recipesModel');
 const cloudinary = require('cloudinary').v2;
+const cloudinaryConfig = require('../cloudinaryConfig');
 
-cloudinary.config({
-    cloud_name: 'aldair',
-    api_key: process.env.CLOUDINARY_SECRET,
-    api_secret: process.env.CLOUDINARY_URL,
-})
 
 // Recipes
 router.get('/', (req, res) => {
@@ -62,6 +58,7 @@ router.get('/:userId/:recipeId', authenticateRequest, (req, res) => {
 
 router.post('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
     let { recipeData } = req.body
+
     
     console.log(recipeData)
     Recipes.insertRecipe(recipeData)
