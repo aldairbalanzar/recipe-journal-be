@@ -7,12 +7,8 @@ const handleStepData = require('../middleware/handleStepData');
 const handleUpdateStep = require('../middleware/handleUpdateStep');
 const Recipes = require('../model/recipesModel');
 const cloudinary = require('cloudinary').v2;
+const cloudinaryConfig = require('../cloudinaryConfig');
 
-cloudinary.config({
-    cloud_name: 'aldair',
-    api_key: process.env.CLOUDINARY_SECRET,
-    api_secret: process.env.CLOUDINARY_URL,
-})
 
 // Recipes
 router.get('/', (req, res) => {
@@ -66,7 +62,7 @@ router.post('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
 
     console.log('\n***FILE: ', imageFile);
 
-    cloudinary.uploader.upload(imageFile.tempFilePath, (err, result) => {
+    cloudinaryConfig.uploader.upload(imageFile.tempFilePath, (err, result) => {
         console.log('result: ', result)
         console.log('url: ', result.url)
         recipeData.imageURL = result.url
