@@ -63,18 +63,9 @@ router.post('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
     console.log('\n***FILE: ', imageFile);
 
     cloudinary.uploader.upload(imageFile.tempFilePath, (err, result) => {
-        Users.updateRecipePic({ imageURL: result.url }, recipeId)
-        .then(result => {
-            res.json({ success: true, result });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({ message: 'Error uploading to Cloudinary' });
-        });
-    });
-    
-    Recipes.insertRecipe(recipeData)
-    .then(recipes => {
+        recipeData.imageURL = result
+        Recipes.insertRecipe(recipeData)
+        .then(recipes => {
         let newRecipe = recipes[recipes.length - 1]
         console.log(`
         created recipe!
@@ -92,6 +83,14 @@ router.post('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
         console.log(`/recipes/userId-POST-catch: ${err}`)
         res.status(500).json({ errorMessage: 'Could not create recipe, something went wrong...', err})
     })
+        .then(result => {
+            res.json({ success: true, result });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ message: 'Error uploading to Cloudinary' });
+        });
+    });
 });
 
 router.put('/:userId', authenticateRequest, handleUpdateRecipe, (req, res) => {
