@@ -7,6 +7,7 @@ module.exports = {
     findUserRecipes,
     
     insertRecipe,
+    insertRecipeImage,
     updateRecipe,
     removeRecipe,
 
@@ -71,6 +72,12 @@ async function insertRecipe(recipeData) {
         created: new Date()
     })
    return findUserRecipes(recipeData.userId)
+};
+
+async function insertRecipeImage(imageURL, recipeId) {
+    console.log('model-insertRecipeImage: inserting... ', imageURL)
+    const result = await('recipes').where('id', recipeId).insert({ imageURL })
+    return findUserRecipes
 };
 
 async function updateRecipe(recipeData) {

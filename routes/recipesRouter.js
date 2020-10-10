@@ -61,23 +61,7 @@ router.get('/:userId/:recipeId', authenticateRequest, (req, res) => {
 })
 
 router.post('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
-    let { recipeData, file } = req.body
-
-    console.log('\n***FILE: ', file);
-
-    cloudinary.uploader.upload(imageFile.tempFilePath, (err, result) => {
-        console.log('result: ', result)
-        console.log('url: ', result.url)
-        recipeData.imageURL = result.url
-        // Users.updateRecipePic({ imageURL: result.url }, recipeId)
-        // .then(result => {
-        //     res.json({ success: true, result });
-        // })
-        // .catch(err => {
-        //     console.log(err);
-        //     res.status(500).json({ message: 'Error uploading to Cloudinary' });
-        // });
-    });
+    let { recipeData } = req.body
     
     console.log(recipeData)
     Recipes.insertRecipe(recipeData)
@@ -101,6 +85,7 @@ router.post('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
     })
 });
 
+// For recipe image
 router.put('/:userId', authenticateRequest, handleUpdateRecipe, (req, res) => {
     let { recipeData } = req.body
 
@@ -115,6 +100,28 @@ router.put('/:userId', authenticateRequest, handleUpdateRecipe, (req, res) => {
         res.status(500).json({ errorMessage:'Could not update recipe, something went wrong...'})
     })
 });
+
+router.put('/:userId/:recipeId/image', authenticateRequest, (req, res) => {
+    let file = req.files.image
+    let { recipeId } = req.params
+
+    console.log('\n***FILE: ', file);
+
+    cloudinary.uploader.upload(imageFile.tempFilePath, (err, result) => {
+        console.log('result: ', result)
+        console.log('url: ', result.url)
+        let imageURL = result.url
+        Recipes.insertRecipeImage(imageURL, recipeId)
+        .then( recipes => {
+            console.log('recipes: ', recipes)
+            res.status(201).json({ message: 'Recipe has been updated!', recipes })
+        })
+        .catch(err => {
+            console.log('/recipes/userId/recipeId/image', err)
+            res.status(500).json({ errorMessage: 'Recipe image could not be added... someting went wrong.', err })
+        })
+    });
+})
 
 router.delete('/:userId/:recipeId', authenticateRequest, (req, res) => {
     let { recipeId, userId } = req.params
