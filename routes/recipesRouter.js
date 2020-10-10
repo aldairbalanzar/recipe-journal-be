@@ -57,7 +57,7 @@ router.get('/:userId/:recipeId', authenticateRequest, (req, res) => {
 
 router.post('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
     let { recipeData } = req.body;
-    const imageFile = req.files.recipeImage;
+    const imageFile = req.body.recipeImage;
 
     console.log('\n***FILE: ', imageFile);
 
