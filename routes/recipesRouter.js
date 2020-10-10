@@ -6,7 +6,8 @@ const handleUpdateRecipe = require('../middleware/handleUpdateRecipe');
 const handleStepData = require('../middleware/handleStepData');
 const handleUpdateStep = require('../middleware/handleUpdateStep');
 const Recipes = require('../model/recipesModel');
-const cloudinary = require('../cloudinaryConfig');
+const cloudinary = require('cloudinary').v2;
+const cloudinaryConfig = require('../cloudinaryConfig');
 
 
 // Recipes
