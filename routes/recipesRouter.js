@@ -82,7 +82,6 @@ router.post('/:userId', authenticateRequest, handleRecipeData, (req, res) => {
     })
 });
 
-// For recipe image
 router.put('/:userId', authenticateRequest, handleUpdateRecipe, (req, res) => {
     let { recipeData } = req.body
 
@@ -98,7 +97,9 @@ router.put('/:userId', authenticateRequest, handleUpdateRecipe, (req, res) => {
     })
 });
 
+// For recipe image
 router.put('/:userId/:recipeId/image', authenticateRequest, (req, res) => {
+    console.log('INSERTING IMAGE...')
     let file = req.files.image
     let { recipeId } = req.params
 
