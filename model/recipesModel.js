@@ -74,10 +74,12 @@ async function insertRecipe(recipeData) {
    return findUserRecipes(recipeData.userId)
 };
 
-async function insertRecipeImage(imageURL, recipeId) {
+async function insertRecipeImage(imageURL, recipeId, userId) {
     console.log('model-insertRecipeImage: inserting... ', imageURL)
-    const result = await('recipes').where('id', recipeId).insert({ imageURL })
-    return findUserRecipes
+    const result = await db('recipes')
+        .where('id', recipeId)
+        .update({ imageURL })
+    return findUserRecipes(userId)
 };
 
 async function updateRecipe(recipeData) {

@@ -10,8 +10,9 @@ const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
     cloud_name: 'aldair',
-    api_key: process.env.CLOUDINARY_SECRET,
-    api_secret: process.env.CLOUDINARY_URL,
+    api_key: process.env.CLOUDINARY_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET,
+    api_env: process.env.CLOUDINARY_URL
 });
 
 
@@ -105,21 +106,15 @@ router.put('/:userId', authenticateRequest, handleUpdateRecipe, (req, res) => {
 // For recipe image
 router.put('/:userId/:recipeId/image', authenticateRequest, (req, res) => {
     console.log('INSERTING IMAGE...')
-    console.log('files: ', req.files)
-    console.log('body: ', req.body)
-    console.log('files: ', req.body.files)
-    const { files } = req.body
+    const { image } = req.files
+    const { recipeId, userId } = req.params
 
-    let { formData } = req.body
-
-    console.log('\n***FILE: ', files[0]);
-    // console.log(formData.get('photo'))
-
-    cloudinary.uploader.upload(formData.tempFilePath, (err, result) => {
-        console.log('result: ', result)
-        console.log('url: ', result.url)
-        let imageURL = result.url
-        Recipes.insertRecipeImage(imageURL, recipeId)
+    cloudinary.uploader.upload(image.tempFilePath, (err, result) => {
+        if(err) {
+            console.log('cloudinary ERROR: ', err)
+            res.status(500).json({ errorMessage: 'Something went wrong uploading image.', err})
+        }
+        Recipes.insertRecipeImage(result.url, recipeId, userId)
         .then( recipes => {
             console.log('recipes: ', recipes)
             res.status(201).json({ message: 'Recipe has been updated!', recipes })
